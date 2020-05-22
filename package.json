@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-nginx-redirect",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A minimal boilerplate for the essential files Gatsby looks for in a plugin",
   "main": "index.js",
   "scripts": {
