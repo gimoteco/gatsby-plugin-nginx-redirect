@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-nginx-redirect",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Adds your redirects to nginx conf on gatsby build",
   "main": "index.js",
   "scripts": {
