@@ -1,6 +1,6 @@
 ## Description
 
-This plugin create a nginx conf file with the gatsby created redirects
+This plugin creates a nginx conf file with the gatsby created redirects
 
 ### Dependencies
 
