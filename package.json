@@ -1,7 +1,7 @@
 {
   "name": "gatsby-plugin-nginx-redirect",
   "version": "0.0.6",
-  "description": "A minimal boilerplate for the essential files Gatsby looks for in a plugin",
+  "description": "Adds your redirects to nginx conf on gatsby build",
   "main": "index.js",
   "scripts": {
     "build": "babel src --out-dir . --ignore \"**/__tests__\"",
@@ -12,8 +12,12 @@
     "gatsby",
     "gatsby-plugin",
     "nginx",
-    "redirect"
+    "redirect",
+    "redirects",
+    "nginx.conf",
+    "createRedirect"
   ],
+  "repository": "https://github.com/gimoteco/gatsby-plugin-nginx-redirect",
   "author": "Guilherme Barbosa Ferreira <gimoteco@gmail.com>",
   "license": "MIT",
   "dependencies": {
@@ -31,5 +35,9 @@
   },
   "engines": {
     "node": ">=10.13.0"
+  },
+  "homepage": "https://github.com/gimoteco/gatsby-plugin-nginx-redirect",
+  "bugs": {
+    "url": "https://github.com/gimoteco/gatsby-plugin-nginx-redirect"
   }
 }
