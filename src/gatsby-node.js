@@ -16,7 +16,7 @@ export async function onPostBuild({ store, reporter }, options) {
     redirects.forEach((redirect) => {
       conf.nginx.server._add(
         "rewrite",
-        `^${redirect.fromPath}$ ${redirect.toPath} ${
+        `^${redirect.fromPath}\\/?$ ${redirect.toPath} ${
           redirect.isPermanent ? "permanent" : "redirect"
         }`
       );
