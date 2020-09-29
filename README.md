@@ -36,7 +36,7 @@ plugins: [
     options: {
       inputConfigFile: `${__dirname}/nginx.conf`,
       outputConfigFile: `${__dirname}/nginx.out.conf`,
-      whereToIncludeRedirects: "server.http" // defaults to: "server"
+      whereToIncludeRedirects: "http.server" // defaults to: "server"
     },
   },
   ...
