@@ -16,9 +16,15 @@ describe("gatsby-node", () => {
       inputConfigFile: `${__dirname}/sampleNginx.conf`,
       outputConfigFile: `${__dirname}/sampleNginx.out.conf`,
     };
+    const options2 = {
+      inputConfigFile: `${__dirname}/sampleNginx2.conf`,
+      outputConfigFile: `${__dirname}/sampleNginx2.out.conf`,
+      whereToIncludeRedirects: "http.server",
+    };
 
     beforeEach(async () => {
       await remove(options.outputConfigFile);
+      await remove(options2.outputConfigFile);
       redirects = [];
       storeMock = {
         getState: jest.fn().mockReturnValue({
@@ -29,6 +35,7 @@ describe("gatsby-node", () => {
 
     afterEach(async () => {
       await remove(options.outputConfigFile);
+      await remove(options2.outputConfigFile);
     });
 
     it("should generate an out file", async () => {
@@ -59,6 +66,27 @@ describe("gatsby-node", () => {
 
       redirects.forEach(async (redirect) => {
         expect(await readFile(options.outputConfigFile, "utf-8")).toContain(
+          `rewrite ^${redirect.fromPath}\\/?$ ${redirect.toPath} permanent;`
+        );
+      });
+    });
+
+    it("should add redirect to file outfile2 ", async () => {
+      const redirects = [
+        { fromPath: "/hello", toPath: "/world", isPermanent: true },
+      ];
+      storeMock.getState.mockReturnValue({ redirects });
+
+      await onPostBuild(
+        {
+          reporter: reporterMock,
+          store: storeMock,
+        },
+        options2
+      );
+
+      redirects.forEach(async (redirect) => {
+        expect(await readFile(options2.outputConfigFile, "utf-8")).toContain(
           `rewrite ^${redirect.fromPath}\\/?$ ${redirect.toPath} permanent;`
         );
       });
