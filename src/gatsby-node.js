@@ -25,7 +25,7 @@ export async function onPostBuild(
       await sleep(500);
 
       redirects.forEach((redirect) => {
-        get(conf.nginx, whereToIncludeRedirects)._add(
+        get(conf.nginx, whereToIncludeRedirects, conf.nginx)._add(
           "rewrite",
           `^${redirect.fromPath}\\/?$ ${redirect.toPath} ${
             redirect.isPermanent ? "permanent" : "redirect"
