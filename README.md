@@ -20,7 +20,7 @@ The path for input nginx configuration file
 
 The path of the outputted nginx configuration file with the redirects within.
 
-### whereToIncludeRedirects (required)
+### whereToIncludeRedirects (optional)(defaults to: "server")
 
 The dot notation to define (using lodash's get) where to include the redirects
 
