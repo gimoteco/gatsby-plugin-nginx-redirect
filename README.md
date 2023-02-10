@@ -4,6 +4,7 @@ This plugin creates a nginx conf file with the gatsby created redirects
 
 ### Dependencies
 
+Gatsby version 5+
 In order to work you have to use the output .conf file in your nginx server
 
 ## How to install
@@ -22,7 +23,8 @@ The path of the outputted nginx configuration file with the redirects within.
 
 ### whereToIncludeRedirects (optional)(defaults to: "server")
 
-The dot notation to define (using lodash's get) where to include the redirects
+Dot notation to define where to include the redirects.
+So "server" will search for the server header, "http.server" will search for http containing server.
 
 ## Examples of usage
 

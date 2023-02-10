@@ -1,5 +1,5 @@
 import { onPostBuild } from "./gatsby-node";
-import { pathExists, remove, readFile } from "fs-extra";
+import { pathExistsSync, removeSync, readFileSync } from "fs-extra";
 
 describe("gatsby-node", () => {
   describe("onPostBuild", () => {
@@ -23,8 +23,8 @@ describe("gatsby-node", () => {
     };
 
     beforeEach(async () => {
-      await remove(options.outputConfigFile);
-      await remove(options2.outputConfigFile);
+      removeSync(options.outputConfigFile);
+      removeSync(options2.outputConfigFile);
       redirects = [];
       storeMock = {
         getState: jest.fn().mockReturnValue({
@@ -34,8 +34,8 @@ describe("gatsby-node", () => {
     });
 
     afterEach(async () => {
-      await remove(options.outputConfigFile);
-      await remove(options2.outputConfigFile);
+      removeSync(options.outputConfigFile);
+      removeSync(options2.outputConfigFile);
     });
 
     it("should generate an out file", async () => {
@@ -47,7 +47,7 @@ describe("gatsby-node", () => {
         options
       );
 
-      expect(await pathExists(options.outputConfigFile)).toBe(true);
+      expect(pathExistsSync(options.outputConfigFile)).toBe(true);
     });
 
     it("should add redirect to file out file", async () => {
@@ -65,7 +65,7 @@ describe("gatsby-node", () => {
       );
 
       redirects.forEach(async (redirect) => {
-        expect(await readFile(options.outputConfigFile, "utf-8")).toContain(
+        expect(readFileSync(options.outputConfigFile, "utf-8")).toContain(
           `rewrite ^${redirect.fromPath}\\/?$ ${redirect.toPath} permanent;`
         );
       });
@@ -86,7 +86,7 @@ describe("gatsby-node", () => {
       );
 
       redirects.forEach(async (redirect) => {
-        expect(await readFile(options2.outputConfigFile, "utf-8")).toContain(
+        expect(readFileSync(options2.outputConfigFile, "utf-8")).toContain(
           `rewrite ^${redirect.fromPath}\\/?$ ${redirect.toPath} permanent;`
         );
       });
@@ -112,7 +112,7 @@ describe("gatsby-node", () => {
       );
 
       redirects.forEach(async (redirect) => {
-        expect(await readFile(options.outputConfigFile, "utf-8")).toContain(
+        expect(readFileSync(options.outputConfigFile, "utf-8")).toContain(
           `rewrite ^${redirect.fromPath}\\/?$ ${redirect.toPath} permanent;`
         );
       });
