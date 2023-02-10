@@ -1,9 +1,52 @@
 import { NginxConfFile } from "nginx-conf";
-import { remove } from "fs-extra";
-import { get } from "lodash";
+import { removeSync } from "fs-extra";
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const searchObject = (needle, object) => {
+  if (!needle || !object) {
+    return object;
+  }
+
+  const locations = needle.split('.');
+
+  let foundObject = object;
+
+  locations.forEach((location) => {
+    foundObject = recursiveSearch(location, foundObject);
+  });
+
+  if (Array.isArray(foundObject) && foundObject.length > 0) {
+    return foundObject[0];
+  }
+
+  return foundObject || object;
+}
+
+const recursiveSearch = (needle, object) => {
+  let result = null;
+
+  if (Array.isArray(object)) {
+    object.forEach((subObject) => {
+      result = recursiveSearch(needle, subObject);
+    })
+  } else if (typeof object === 'object') {
+    for(let key in object) {
+      if (key === needle) {
+        result = object[key];
+      }
+      if (!result) {
+        result = recursiveSearch(needle, object[key]);
+      }
+      if (result) {
+        return result;
+      }
+    };
+  }
+
+  return result;
 }
 
 export async function onPostBuild(
@@ -11,7 +54,7 @@ export async function onPostBuild(
   { outputConfigFile, inputConfigFile, whereToIncludeRedirects = "server" }
 ) {
   const { redirects } = store.getState();
-  await remove(outputConfigFile);
+  removeSync(outputConfigFile);
 
   return new Promise((resolve) => {
     NginxConfFile.create(inputConfigFile, async function (err, conf) {
@@ -24,18 +67,21 @@ export async function onPostBuild(
       conf.flush();
       await sleep(500);
 
-      redirects.forEach((redirect) => {
-        get(conf.nginx, whereToIncludeRedirects, conf.nginx)._add(
-          "rewrite",
-          `^${redirect.fromPath}\\/?$ ${redirect.toPath} ${
-            redirect.isPermanent ? "permanent" : "redirect"
-          }`
-        );
-      });
+      let foundObject = searchObject(whereToIncludeRedirects, conf.nginx);
+      if (foundObject) {
+        redirects.forEach((redirect) => {
+          foundObject._add(
+            'rewrite',
+            `^${redirect.fromPath}\\/?$ ${redirect.toPath} ${redirect.isPermanent ? "permanent" : "redirect"}`
+          )
+        });
+      }
 
       conf.live(outputConfigFile);
       conf.flush();
+
       await sleep(500);
+
       resolve();
     });
 
